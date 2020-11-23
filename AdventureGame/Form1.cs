@@ -27,6 +27,12 @@ namespace AdventureGame
         {
         }
 
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            Graphics gc = e.Graphics;
+        }
+
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             Input.ProcessKeyUp(e);

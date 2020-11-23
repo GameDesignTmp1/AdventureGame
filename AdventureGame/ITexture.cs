@@ -10,6 +10,7 @@ namespace AdventureGame
     interface ITexture
     {
         void LoadTexture(string filename);
-        void Print(int x, int y);
+        // 作为静态函数实现，将所有贴图由深到浅打印（参考我展示的 2D 游戏）
+        void Print();
     }
 }
