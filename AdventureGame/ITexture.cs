@@ -10,6 +10,6 @@ namespace AdventureGame
     interface ITexture
     {
         void LoadTexture(string filename);
-        void Print();
+        void Print(int x, int y);
     }
 }

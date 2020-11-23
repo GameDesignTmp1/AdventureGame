@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collision.cs" />
+    <Compile Include="GameObject.cs" />
     <Compile Include="IAnimation.cs" />
     <Compile Include="ICollision.cs" />
     <Compile Include="Form1.cs">
