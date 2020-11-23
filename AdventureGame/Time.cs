@@ -8,5 +8,9 @@ namespace AdventureGame
 {
     class Time
     {
+        static public float GetDeltaTime()
+        {
+            return 0;
+        }
     }
 }
