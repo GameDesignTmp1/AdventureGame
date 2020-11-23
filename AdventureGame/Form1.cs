@@ -15,6 +15,7 @@ namespace AdventureGame
         public Form1()
         {
             InitializeComponent();
+            Time.Init();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -29,6 +30,11 @@ namespace AdventureGame
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             Input.ProcessKeyUp(e);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            Time.Update();
         }
     }
 }
