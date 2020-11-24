@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AdventureGame
 {
-    class Vec3
+    public class Vec3
     {
         public double X, Y, Z;
 

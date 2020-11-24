@@ -11,6 +11,6 @@ namespace AdventureGame
     {
         // 给出某个方向上 x、y、z 可以移动的最大距离（注意是三个轴在 moveDir 内各自的最大距离）
         Vec2 GetMoveDis(Vec2 moveDir);
-        bool IsCollide(Collision collision);
+        List<Collision> GetEnterCollisions();
     }
 }

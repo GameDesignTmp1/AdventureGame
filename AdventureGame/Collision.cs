@@ -8,13 +8,17 @@ using System.Threading.Tasks;
 namespace AdventureGame
 {
     // 简单起见，碰撞体为方盒
-    class Collision : ICollision
+    public class Collision : ICollision
     {
         private static List<Collision> collisions = new List<Collision>();
+        private List<Collision> enterCollisions = new List<Collision>();
+        private List<Collision> exitCollisions = new List<Collision>();
         // 相对物体中心的偏移
         public double OffsetX, OffsetY;
         public double HalfWidth, HalfHeight;
         public GameObject GameObject;
+        public bool IsTrigger = false;
+
         public Collision(GameObject gameObject, double offsetX = 0, double offsetY = 0, 
             double halfWidth = 20, double halfHeight= 20)
         {
@@ -31,6 +35,7 @@ namespace AdventureGame
             GameObject.X += dir.X;
             GameObject.Y += dir.Y;
         }
+
         public Vec2 GetMoveDis(Vec2 moveDir)
         {
             var res = moveDir;
@@ -52,7 +57,8 @@ namespace AdventureGame
                 (int)HalfHeight * 2);
         }
 
-        private Vec2 CutDir(Collision other, Vec2 dir, ref Vec2 res)
+        private double offset = 0;
+        private void CutDir(Collision other, Vec2 dir, ref Vec2 res)
         {
             bool t1 = this.Intersect(other, new Vec2(dir.X, 0));
             bool t2 = this.Intersect(other, new Vec2(0, dir.Y));
@@ -61,13 +67,13 @@ namespace AdventureGame
             {
                 double x, y;
                 if (dir.X > 0)
-                    x = Math.Min(Math.Max(other.GetMinX() - GetMaxX() - 0.001, 0), res.X);
+                    x = Math.Min(Math.Max(other.GetMinX() - GetMaxX() - offset, 0), res.X);
                 else
-                    x = Math.Max(Math.Min(other.GetMaxX() - GetMinX() + 0.001, 0), res.X);
+                    x = Math.Max(Math.Min(other.GetMaxX() - GetMinX() + offset, 0), res.X);
                 if (dir.Y > 0)
-                    y = Math.Min(Math.Max(other.GetMinY() - GetMaxY() - 0.001, 0), res.Y);
+                    y = Math.Min(Math.Max(other.GetMinY() - GetMaxY() - offset, 0), res.Y);
                 else
-                    y = Math.Max(Math.Min(other.GetMaxY() - GetMinY() + 0.001, 0), res.Y);
+                    y = Math.Max(Math.Min(other.GetMaxY() - GetMinY() + offset, 0), res.Y);
 
                 if (Math.Abs(x) * Math.Abs(dir.Y) > Math.Abs(y) * Math.Abs(dir.X))
                 {
@@ -86,34 +92,39 @@ namespace AdventureGame
                 if (t1)
                 {
                     if (dir.X > 0)
-                        res.X = Math.Min(Math.Max(other.GetMinX() - GetMaxX() - 0.001, 0), res.X);
+                        res.X = Math.Min(Math.Max(other.GetMinX() - GetMaxX() - offset, 0), res.X);
                     else if (dir.X < 0)
-                        res.X = Math.Max(Math.Min(other.GetMaxX() - GetMinX() + 0.001, 0), res.X);
+                        res.X = Math.Max(Math.Min(other.GetMaxX() - GetMinX() + offset, 0), res.X);
                 }
 
                 if (t2)
                 {
                     if (dir.Y > 0)
-                        res.Y = Math.Min(Math.Max(other.GetMinY() - GetMaxY() - 0.001, 0), res.Y);
+                        res.Y = Math.Min(Math.Max(other.GetMinY() - GetMaxY() - offset, 0), res.Y);
                     else if (dir.Y < 0)
-                        res.Y = Math.Max(Math.Min(other.GetMaxY() - GetMinY() + 0.001, 0), res.Y);
+                        res.Y = Math.Max(Math.Min(other.GetMaxY() - GetMinY() + offset, 0), res.Y);
                 }
             }
-
-            return res;
         }
+
         public Vec2 GetCenter()
         {
             return new Vec2(OffsetX + GameObject.X, OffsetY + GameObject.Y);
         }
 
-        public bool Intersect(Collision other)
+        private bool Collide(Collision other)
         {
             return !(other.GetMaxX() < GetMinX() || other.GetMinX() > GetMaxX()
                 || other.GetMaxY() < GetMinY() || other.GetMinY() > GetMaxY());
         }
 
-        public bool Intersect(Collision other, Vec2 dir)
+        private bool Intersect(Collision other)
+        {
+            return !(other.GetMaxX() <= GetMinX() || other.GetMinX() >= GetMaxX()
+                || other.GetMaxY() <= GetMinY() || other.GetMinY() >= GetMaxY());
+        }
+
+        private bool Intersect(Collision other, Vec2 dir)
         {
             OffsetX += dir.X;
             OffsetY += dir.Y;
@@ -143,9 +154,47 @@ namespace AdventureGame
             return GameObject.Y + OffsetY + HalfHeight;
         }
 
-        public bool IsCollide(Collision collision)
+        public void UpdateCollide()
         {
-            throw new NotImplementedException();
+            exitCollisions.Clear();
+            foreach (var col in enterCollisions)
+            {
+                exitCollisions.Add(col);
+            }
+            enterCollisions.Clear();
+
+            for (int i = 0; i < collisions.Count; ++i)
+            {
+                if (collisions[i] != this && Collide(collisions[i]))
+                {
+                    enterCollisions.Add(collisions[i]);
+                }
+            }
+
+            if (IsTrigger)
+            {
+                List<GameObject> objects = new List<GameObject>();
+                foreach (var col in enterCollisions)
+                {
+                    objects.Add(col.GameObject);
+                }
+                GameObject.OnTrigger(objects);
+            }
+        }
+
+        public static void Update()
+        {
+            for (int i = 0; i < collisions.Count; ++i)
+            {
+                collisions[i].UpdateCollide();
+            }
+        }
+
+        public List<Collision> GetEnterCollisions()
+        {
+            List<Collision> res = new List<Collision>();
+
+            return res;
         }
 
         ~Collision()

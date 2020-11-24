@@ -8,21 +8,32 @@ namespace AdventureGame
 {
     public class GameObject
     {
-        static List<GameObject> gameObjects = new List<GameObject>();
+        public static List<GameObject> GameObjects = new List<GameObject>();
+        public Collision collision = null;
 
-        public double X, Y;
-        private Collision collision;
+        public double X, Y, Depth;
+        public Transform Transform = null;
 
-        public GameObject(double x, double y)
+        public GameObject(double x, double y, double depth = 0)
         {
             X = x;
             Y = y;
-            gameObjects.Add(this);
+            Depth = depth;
+            if (depth == 0)
+            {
+                collision = new Collision(this);
+                Transform = new Transform(this, new Vec2(x, y), false);
+            }
+            GameObjects.Add(this);
+        }
+
+        public virtual void OnTrigger(List<GameObject> gameObjects)
+        {
         }
 
         ~GameObject()
         {
-            gameObjects.Remove(this);
+            GameObjects.Remove(this);
         }
     }
 }

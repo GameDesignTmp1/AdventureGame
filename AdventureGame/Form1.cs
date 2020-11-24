@@ -71,6 +71,7 @@ namespace AdventureGame
         private void timer1_Tick(object sender, EventArgs e)
         {
             Time.Update();
+            Collision.Update();
 
             this.Invalidate();
         }
