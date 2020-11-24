@@ -16,9 +16,8 @@ namespace AdventureGame
         public Collision collision;
         public bool UseGravity = true;
         public double Gravity = 9.8;
-        public double Speed = 30;
         public Vec2 Velocity = new Vec2();
-        private double _gravityRate = 100;
+        private double _gravityRate = 10;
 
         public Transform(GameObject gameObject, Vec2 location, bool turnLeft)
         {
@@ -35,7 +34,7 @@ namespace AdventureGame
         public void Translate(Vec2 dir)
         {
             var d = collision.GetMoveDis(dir);
-            Location += d * Time.DeltaTime;
+            Velocity += d;
         }
 
         private void UpdateGravity()
@@ -55,6 +54,8 @@ namespace AdventureGame
         {
             _preLoc = Location;
             UpdateGravity();
+
+            Velocity = (Location - _preLoc) / Time.DeltaTime;
 
             GameObject.X = Location.X;
             GameObject.Y = Location.Y;

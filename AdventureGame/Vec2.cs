@@ -33,7 +33,7 @@ namespace AdventureGame
         public static Vec2 operator /(Vec2 v, double d)
         {
             var dd = 1 / d;
-            return new Vec2(v.X * d, v.Y * d);
+            return new Vec2(v.X * dd, v.Y * dd);
         }
 
         public static Vec2 operator *(Vec2 v, double d)

@@ -66,7 +66,7 @@ namespace AdventureGame
             Time.Update();
             Collision.Update();
             Transform.Update();
-            textBox1.Text = o1.Transform.GetVelocity().ToString();
+            textBox1.Text = o3.Transform.GetVelocity().ToString();
 
             this.Invalidate();
         }
