@@ -63,6 +63,7 @@
     <Compile Include="ITexture.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="ITransform.cs" />
+    <Compile Include="Vec2.cs" />
     <Compile Include="Vec3.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

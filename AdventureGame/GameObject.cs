@@ -10,9 +10,10 @@ namespace AdventureGame
     {
         static List<GameObject> gameObjects = new List<GameObject>();
 
-        public int X, Y;
+        public double X, Y;
         private Collision collision;
-        GameObject(int x, int y)
+
+        public GameObject(double x, double y)
         {
             X = x;
             Y = y;

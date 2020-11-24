@@ -9,7 +9,7 @@ namespace AdventureGame
 {
     public static class Input
     {
-        public static HashSet<Keys> Key;
+        public static HashSet<Keys> Key = new HashSet<Keys>();
         public static void ProcessKeyDown(KeyEventArgs e)
         {
             if (!Key.Contains(e.KeyCode))
