@@ -36,6 +36,16 @@ namespace AdventureGame
             return new Vec2(v.X * d, v.Y * d);
         }
 
+        public static Vec2 operator *(Vec2 v, double d)
+        {
+            return new Vec2(v.X * d, v.Y * d);
+        }
+
+        public static Vec2 operator +(Vec2 v, double d)
+        {
+            return new Vec2(v.X + d, v.Y + d);
+        }
+
         public Vec2 Normalize()
         {
             return this / Length();

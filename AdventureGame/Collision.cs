@@ -19,6 +19,7 @@ namespace AdventureGame
         public double HalfWidth = 20, HalfHeight = 20;
         public GameObject GameObject;
         public bool IsTrigger = false;
+        // 被设置为刚体的物体能够阻止其他物体前进
         public bool IsRigid = true;
 
         public Collision(GameObject gameObject)
@@ -43,7 +44,9 @@ namespace AdventureGame
             var res = moveDir;
             for (int i = 0; i < Collisions.Count; i++)
             {
-                if (Collisions[i] != this && Intersect(Collisions[i], moveDir))
+                // 对方是刚体才能够阻止其他物体前进
+                if (Collisions[i] != this && Collisions[i].IsRigid &&
+                    Intersect(Collisions[i], moveDir))
                 {
                     CutDir(Collisions[i], moveDir, ref res);
                 }
