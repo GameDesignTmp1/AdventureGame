@@ -21,7 +21,7 @@ namespace AdventureGame
             o2 = new GameObject(39, 45);
             o3 = new GameObject(-10, 60);
             o2.Transform.UseGravity = false;
-            o3.Transform.UseGravity = false;
+            o1.Transform.UseGravity = false;
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -66,6 +66,7 @@ namespace AdventureGame
             Time.Update();
             Collision.Update();
             Transform.Update();
+            textBox1.Text = o1.Transform.GetVelocity().ToString();
 
             this.Invalidate();
         }
