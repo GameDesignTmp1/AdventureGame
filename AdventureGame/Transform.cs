@@ -26,19 +26,18 @@ namespace AdventureGame
             GameObject = gameObject;
             collision = gameObject.collision;
         }
-
+        // 位移
         public void Translate(Vec2 dir)
         {
             var d = collision.GetMoveDis(dir);
             GameObject.X += d.X;
             GameObject.Y += d.Y;
         }
-
+        // 转向
         public void TurnLeft()
         {
             ToLeft = true;
         }
-
         public void TurnRight()
         {
             ToLeft = false;
