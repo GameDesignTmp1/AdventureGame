@@ -36,6 +36,7 @@ namespace AdventureGame
             {
                 if (debug)
                     gameObject.collision.Draw(gc);
+
             }
         }
         // 碰撞发生时

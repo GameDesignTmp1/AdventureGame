@@ -14,7 +14,7 @@ namespace AdventureGame
         public bool ToLeft = false;
         public GameObject GameObject;
         public Collision collision;
-        public bool UseGravity = true;
+        public bool UseGravity = false;
         public double Gravity = 9.8;
         public Vec2 Velocity = new Vec2();
         private double _gravityRate = 10;
@@ -71,7 +71,7 @@ namespace AdventureGame
 
         public Vec2 GetVelocity()
         {
-            return (Location - _preLoc) / Time.DeltaTime;
+            return Velocity;
         }
         // 转向
         public void TurnLeft()

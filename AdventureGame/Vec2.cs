@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,9 +47,10 @@ namespace AdventureGame
             return new Vec2(v1.X - v2.X, v1.Y - v2.Y);
         }
 
-        public string ToString()
+        public override string ToString()
         {
-            return "x:" + X.ToString() + ", y:" + Y.ToString();
+            return "x:" + X.ToString(CultureInfo.InvariantCulture) + 
+                   ", y:" + Y.ToString(CultureInfo.InvariantCulture);
         }
 
         public static Vec2 operator +(Vec2 v, double d)
