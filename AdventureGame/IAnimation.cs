@@ -12,5 +12,6 @@ namespace AdventureGame
         void Play();
         void Pause();
         void Reset();
+        void Destroy();
     }
 }

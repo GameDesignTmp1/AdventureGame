@@ -16,12 +16,14 @@ namespace AdventureGame
         public Transform Transform = null;
         // 静态物体待定义
         public bool IsStatic = false;
+        public string Tag;
 
-        public GameObject(double x, double y, double depth = 0)
+        public GameObject(double x, double y, double depth = 0, string tag = "")
         {
             X = x;
             Y = y;
             Depth = depth;
+            Tag = tag;
             if (depth == 0)
             {
                 collision = new Collision(this);
@@ -45,9 +47,18 @@ namespace AdventureGame
         public virtual void OnTriggerExit(List<GameObject> gameObjects){}
         // 有碰撞体驻留时
         public virtual void OnTriggerStay(List<GameObject> gameObjects){}
-        ~GameObject()
+
+        public void Destroy()
         {
             GameObjects.Remove(this);
+            Transform.Destroy();
+            Transform = null;
+            collision.Destroy();
+            collision = null;
+        }
+        ~GameObject()
+        {
+            Destroy();
         }
     }
 }

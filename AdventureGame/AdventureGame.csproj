@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>.\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -61,11 +64,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ITexture.cs" />
-    <Compile Include="ScaneForm.cs">
+    <Compile Include="SceneForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ScaneForm.Designer.cs">
-      <DependentUpon>ScaneForm.cs</DependentUpon>
+    <Compile Include="SceneForm.Designer.cs">
+      <DependentUpon>SceneForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Time.cs" />
     <Compile Include="ITransform.cs" />
@@ -84,8 +87,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ScaneForm.resx">
-      <DependentUpon>ScaneForm.cs</DependentUpon>
+    <EmbeddedResource Include="SceneForm.resx">
+      <DependentUpon>SceneForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

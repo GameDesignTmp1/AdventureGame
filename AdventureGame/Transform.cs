@@ -83,9 +83,15 @@ namespace AdventureGame
             ToLeft = false;
         }
 
+        public void Destroy()
+        {
+            GameObject = null;
+            Transforms.Remove(this);
+            collision = null;
+        }
         ~Transform()
         {
-            Transforms.Remove(this);
+            Destroy();
         }
     }
 }

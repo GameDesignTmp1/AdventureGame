@@ -14,5 +14,6 @@ namespace AdventureGame
         List<Collision> GetEnterCollisions();
         List<Collision> GetExitCollisions();
         List<Collision> GetStayCollisions();
+        void Destroy();
     }
 }

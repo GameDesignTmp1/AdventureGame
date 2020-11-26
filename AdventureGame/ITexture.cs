@@ -12,5 +12,7 @@ namespace AdventureGame
         void LoadTexture(string filename);
         // 作为静态函数实现，将所有贴图由深到浅打印（参考我展示的 2D 游戏）
         void Draw();
+        void Resize(int x, int y);
+        void Destroy();
     }
 }

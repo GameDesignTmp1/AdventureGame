@@ -21,17 +21,12 @@ namespace AdventureGame
         public bool IsTrigger = false;
         // 被设置为刚体的物体能够阻止其他物体前进
         public bool IsRigid = true;
+        public bool IsValid = true;
 
         public Collision(GameObject gameObject)
         {
             GameObject = gameObject;
             Collisions.Add(this);
-        }
-
-        public void Move(Vec2 dir)
-        {
-            GameObject.X += dir.X;
-            GameObject.Y += dir.Y;
         }
         /**
          * 遍历所有碰撞体
@@ -45,7 +40,7 @@ namespace AdventureGame
             for (int i = 0; i < Collisions.Count; i++)
             {
                 // 对方是刚体才能够阻止其他物体前进
-                if (Collisions[i] != this && Collisions[i].IsRigid &&
+                if (Collisions[i] != this && Collisions[i].IsValid && Collisions[i].IsRigid &&
                     Intersect(Collisions[i], moveDir))
                 {
                     CutDir(Collisions[i], moveDir, ref res);
@@ -172,7 +167,9 @@ namespace AdventureGame
             _exitCollisions.Clear();
             foreach (var col in _stayCollisions)
             {
-                if (!Collide(col))
+                if (!col.IsValid)
+                    _stayCollisions.Remove(col);
+                else if (!Collide(col))
                 {
                     _exitCollisions.Add(col);
                     _stayCollisions.Remove(col);
@@ -180,7 +177,7 @@ namespace AdventureGame
             }
             foreach (var col in _enterCollisions)
             {
-                if (!Collide(col))
+                if (!Collide(col) && col.IsValid)
                     _exitCollisions.Add(col);
                 else
                     _stayCollisions.Add(col);
@@ -189,7 +186,7 @@ namespace AdventureGame
 
             for (int i = 0; i < Collisions.Count; ++i)
             {
-                if (Collisions[i] != this && Collide(Collisions[i]))
+                if (Collisions[i] != this && Collisions[i].IsValid && Collide(Collisions[i]))
                 {
                     _enterCollisions.Add(Collisions[i]);
                 }
@@ -255,9 +252,16 @@ namespace AdventureGame
             return _stayCollisions;
         }
 
+        public void Destroy()
+        {
+            GameObject = null;
+            Collisions.Remove(this);
+            IsValid = false;
+        }
+
         ~Collision()
         {
-            Collisions.Remove(this);
+            Destroy();
         }
     }
 }

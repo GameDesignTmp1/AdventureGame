@@ -58,7 +58,7 @@ namespace AdventureGame
 
         private void 设置场景ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var f2 = new ScaneForm();
+            var f2 = new SceneForm();
             f2.Show();
         }
 

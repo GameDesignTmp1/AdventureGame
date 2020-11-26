@@ -12,5 +12,6 @@ namespace AdventureGame
         void Translate(Vec2 moveDir);
         void TurnLeft();
         void TurnRight();
+        void Destroy();
     }
 }
