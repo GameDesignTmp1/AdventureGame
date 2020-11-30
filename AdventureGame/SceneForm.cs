@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -117,15 +118,27 @@ namespace AdventureGame
                     break;
             }
         }
-
+        // 根据当前贴图生成物体
         private void button1_Click(object sender, EventArgs e)
         {
+            if (_pictureList.Count <= 0)
+                return;
             selectedGameObject = new GameObject(0, 0);
             var idx = comboBox1.SelectedIndex;
             objects.Add(new Tuple<GameObject, string>(selectedGameObject, _pictureList[idx]));
             _gen = true;
         }
-
+        // 更新贴图列表
+        private void UpdatePicList()
+        {
+            comboBox1.Items.Clear();
+            foreach (var name in _pictureList)
+            {
+                var t = name.Split('\\');
+                comboBox1.Items.Add(t[t.Length - 1]);
+            }
+        }
+        // 添加贴图
         private void button3_Click(object sender, EventArgs e)
         {
             var diag = new OpenFileDialog();
@@ -137,19 +150,9 @@ namespace AdventureGame
                     _pictureList.Add(name);
                 }
             }
-            comboBox1.Items.Clear();
-            foreach (var name in _pictureList)
-            {
-                var t = name.Split('\\');
-                comboBox1.Items.Add(t[t.Length - 1]);
-            }
+            UpdatePicList();
         }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
-
+        // 选择贴图
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             var idx = comboBox1.SelectedIndex;
@@ -167,18 +170,14 @@ namespace AdventureGame
             source.SetResolution(pictureBox1.Width, pictureBox1.Height);
             pictureBox1.Image = target;
         }
-
-        private void textBox7_TextChanged(object sender, EventArgs e)
+        // 场景保存格式
+        public struct Saver
         {
-
-        }
-
-        struct Saver
-        {
-            public double X, Y, OffsetX, OffsetY;
+            public double X, Y, OffsetX, OffsetY, Depth;
             public double HalfWidth, HalfHeight;
             public string Tag, Filename;
         }
+        // 保存场景
         private void button4_Click(object sender, EventArgs e)
         {
             var diag = new SaveFileDialog();
@@ -187,17 +186,13 @@ namespace AdventureGame
                 List<Saver> js = new List<Saver>();
                 foreach (var tp in objects)
                 {
-                    var tmp = new Saver();
+                    Object tmp = new Saver();
                     var obj = tp.Item1;
-                    tmp.Filename = tp.Item2;
-                    tmp.HalfHeight = obj.collision.HalfHeight;
-                    tmp.HalfWidth = obj.collision.HalfWidth;
-                    tmp.OffsetX = obj.collision.OffsetX;
-                    tmp.OffsetY = obj.collision.OffsetY;
-                    tmp.Tag = obj.Tag;
-                    tmp.X = obj.X;
-                    tmp.Y = obj.Y;
-                    js.Add(tmp);
+                    ObjCopy(tmp, obj);
+                    ObjCopy(tmp, obj.collision);
+                    Saver t = (Saver) tmp;
+                    t.Filename = tp.Item2;
+                    js.Add(t);
                 }
                 File.WriteAllText(diag.FileName, JsonConvert.SerializeObject(js));
             }
@@ -207,7 +202,46 @@ namespace AdventureGame
         {
             foreach (var tuple in objects)
             {
-                tuple.Item1
+                tuple.Item1.Destroy();
+            }
+        }
+        // 加载已有场景
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var diag = new OpenFileDialog();
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                byte[] str = new byte[10240];
+                int length = diag.OpenFile().Read(str, 0, 10240);
+                string s = Encoding.Default.GetString(str);
+                List<Saver> tmpList;
+                try
+                {
+                    tmpList = JsonConvert.DeserializeObject<List<Saver>>(s);
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("场景文件加载错误，必须是合法的 Json 文件且不能有中文");
+                    return;
+                }
+                List<Saver> js = new List<Saver>();
+                foreach (var tuple in objects)
+                {
+                    tuple.Item1.Destroy();
+                }
+                objects.Clear();
+                foreach (var tp in tmpList)
+                {
+                    var obj = new GameObject(tp.X, tp.Y, tp.Depth);
+                    ObjCopy(obj, tp);
+                    ObjCopy(obj.collision, tp);
+                    objects.Add(new Tuple<GameObject, string>(
+                        obj, tp.Filename));
+                    if (!_pictureList.Contains(tp.Filename))
+                        _pictureList.Add(tp.Filename);
+                }
+                UpdatePicList();
+                Invalidate();
             }
         }
 
@@ -218,6 +252,22 @@ namespace AdventureGame
             _x = Width / 2;
             _y = Height / 2;
         }
-        
+
+        public static void ObjCopy(Object target, Object src)
+        {
+            var info1 = target.GetType().GetFields();
+            var info2 = src.GetType().GetFields();
+            foreach (var targetInfo in info1)
+            {
+                foreach (var srcInfo in info2)
+                {
+                    if (srcInfo.Name == targetInfo.Name)
+                    {
+                        targetInfo.SetValue(target, srcInfo.GetValue(src));
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

@@ -1,30 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace AdventureGame
 {
     public class Transform : ITransform
     {
         public static List<Transform> Transforms = new List<Transform>();
-        public Vec2 Location = new Vec2();
-        private Vec2 _preLoc = new Vec2();
+        public Vec2 Location;
+        private Vec2 _preLoc;
         public bool ToLeft = false;
         public GameObject GameObject;
-        public Collision collision;
+        public Collision Collision;
         public bool UseGravity = false;
         public double Gravity = 9.8;
         public Vec2 Velocity = new Vec2();
         private double _gravityRate = 10;
+        public bool IsValid = true;
 
         public Transform(GameObject gameObject, Vec2 location, bool turnLeft)
         {
             Location = location;
             ToLeft = turnLeft;
             GameObject = gameObject;
-            collision = gameObject.collision;
+            Collision = gameObject.collision;
             Transforms.Add(this);
             Location.X = gameObject.X;
             Location.Y = gameObject.Y;
@@ -33,8 +30,8 @@ namespace AdventureGame
         // 位移
         public void Translate(Vec2 dir)
         {
-            var d = collision.GetMoveDis(dir);
-            Velocity += d;
+            var d = Collision.GetMoveDis(dir);
+            Location += d;
         }
 
         private void UpdateGravity()
@@ -43,22 +40,20 @@ namespace AdventureGame
                 return;
             
             Velocity.Y += Gravity * _gravityRate * Time.DeltaTime;
-            var tmp = collision.GetMoveDis(Velocity * Time.DeltaTime);
-            if (tmp.Y == 0)
-                Velocity.Reset();
+            var tmp = Collision.GetMoveDis(Velocity * Time.DeltaTime);
 
             Location += tmp;
         }
 
         public void UpdateTransform()
         {
-            _preLoc = Location;
             UpdateGravity();
 
             Velocity = (Location - _preLoc) / Time.DeltaTime;
 
             GameObject.X = Location.X;
             GameObject.Y = Location.Y;
+            _preLoc = Location;
         }
 
         public static void Update()
@@ -87,7 +82,7 @@ namespace AdventureGame
         {
             GameObject = null;
             Transforms.Remove(this);
-            collision = null;
+            Collision = null;
         }
         ~Transform()
         {
