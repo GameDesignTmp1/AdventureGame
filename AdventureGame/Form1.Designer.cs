@@ -45,6 +45,7 @@
             // 
             // textBox1
             // 
+            this.textBox1.Enabled = false;
             this.textBox1.Location = new System.Drawing.Point(585, 70);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(164, 25);
@@ -74,6 +75,7 @@
             this.加载场景ToolStripMenuItem.Name = "加载场景ToolStripMenuItem";
             this.加载场景ToolStripMenuItem.Size = new System.Drawing.Size(83, 24);
             this.加载场景ToolStripMenuItem.Text = "加载场景";
+            this.加载场景ToolStripMenuItem.Click += new System.EventHandler(this.加载场景ToolStripMenuItem_Click);
             // 
             // Form1
             // 

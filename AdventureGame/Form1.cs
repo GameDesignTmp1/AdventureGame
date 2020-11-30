@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace AdventureGame
 {
@@ -21,7 +22,7 @@ namespace AdventureGame
             o2 = new GameObject(39, 45);
             o3 = new GameObject(-10, 60);
             o2.Transform.UseGravity = false;
-            o1.Transform.UseGravity = false;
+            o1.Transform.UseGravity = true;
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -62,6 +63,16 @@ namespace AdventureGame
             f2.Show();
         }
 
+        private void 加载场景ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var diag = new OpenFileDialog();
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                Scene.LoadScene(diag.FileName);
+                Invalidate();
+            }
+        }
+
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             Input.ProcessKeyUp(e);
@@ -72,7 +83,6 @@ namespace AdventureGame
             Time.Update();
             Collision.Update();
             Transform.Update();
-            textBox1.Text = o3.Transform.GetVelocity().ToString();
 
             this.Invalidate();
         }

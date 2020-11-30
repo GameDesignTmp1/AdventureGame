@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AdventureGame
 {
@@ -13,10 +14,12 @@ namespace AdventureGame
         public Collision collision = null;
         // 坐标，深度决定绘制的顺序
         public double X, Y, Depth;
+
         public Transform Transform = null;
         // 静态物体待定义
         public bool IsStatic = false;
         public string Tag;
+        public bool IsValid = true;
 
         public GameObject(double x, double y, double depth = 0, string tag = "")
         {
@@ -50,10 +53,13 @@ namespace AdventureGame
 
         public void Destroy()
         {
+            IsValid = false;
             GameObjects.Remove(this);
-            Transform.Destroy();
+            if (Transform != null)
+                Transform.Destroy();
             Transform = null;
-            collision.Destroy();
+            if (collision != null)
+                collision.Destroy();
             collision = null;
         }
         ~GameObject()
