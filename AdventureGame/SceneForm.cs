@@ -24,6 +24,7 @@ namespace AdventureGame
         private List<Tuple<GameObject, string>> objects = new List<Tuple<GameObject, string>>();
         private GameObject selectedGameObject = null;
         private bool _gen = false;
+        private int _align = 0;
         public SceneForm()
         {
             InitializeComponent();
@@ -112,9 +113,8 @@ namespace AdventureGame
                     break;
                 case MouseButtons.Left:
                     if (_gen)
-                    {
                         _gen = false;
-                    }
+                    
                     break;
             }
         }

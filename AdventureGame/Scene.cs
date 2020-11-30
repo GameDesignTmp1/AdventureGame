@@ -11,6 +11,7 @@ namespace AdventureGame
 {
     public static class Scene
     {
+        public static Vec2 Offset;
         public static void LoadScene(string filename)
         {
             byte[] str = new byte[10240];

@@ -56,6 +56,14 @@ namespace AdventureGame
             gc.DrawRectangle(new Pen(Color.Red, 1), (int)(ct.X), (int)ct.Y, (int)HalfWidth * 2, 
                 (int)HalfHeight * 2);
         }
+        public void Draw(Graphics gc, Vec2 offset)
+        {
+            var ct = GetCenter();
+            gc.DrawRectangle(new Pen(Color.Red, 1), 
+                (int)(ct.X + offset.X), (int) (ct.Y + offset.Y), 
+                (int)HalfWidth * 2,
+                (int)HalfHeight * 2);
+        }
         // 偏移，用于调整碰撞限度
         private double offset = 0;
         /*
@@ -114,7 +122,7 @@ namespace AdventureGame
             }
         }
 
-        public Vec2 GetCenter()
+        private Vec2 GetCenter()
         {
             return new Vec2(OffsetX + GameObject.X, OffsetY + GameObject.Y);
         }
@@ -142,22 +150,22 @@ namespace AdventureGame
             return res;
         }
 
-        public double GetMinX()
+        private double GetMinX()
         {
             return GameObject.X + OffsetX - HalfWidth;
         }
 
-        public double GetMaxX()
+        private double GetMaxX()
         {
             return GameObject.X + OffsetX + HalfWidth;
         }
 
-        public double GetMinY()
+        private double GetMinY()
         {
             return GameObject.Y + OffsetY - HalfHeight;
         }
 
-        public double GetMaxY()
+        private double GetMaxY()
         {
             return GameObject.Y + OffsetY + HalfHeight;
         }
