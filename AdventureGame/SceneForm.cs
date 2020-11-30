@@ -42,9 +42,15 @@ namespace AdventureGame
             gc.DrawLine(pen, xx, yy, xx - len, yy);
             gc.DrawLine(pen, xx, yy, xx, yy + len);
             gc.DrawLine(pen, xx, yy, xx, yy - len);
-            GameObject.Update(gc, true);
+            foreach (var tuple in objects)
+            {
+                var obj = tuple.Item1;
+                double dx = (obj.X - _x) * _scale + xx, dy = (obj.Y - _y) * _scale + yy;
+                textBox23.Text = dx.ToString() + " " + dy.ToString();
+                tuple.Item1.Collision.Draw(gc, new Vec2(dx - obj.X, dy - obj.Y), _scale);
+            }
         }
-
+        // 缩放
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
@@ -95,10 +101,10 @@ namespace AdventureGame
             if (_gen)
             {
                 selectedGameObject.Transform.Location = 
-                    new Vec2(e.X - selectedGameObject.collision.HalfWidth,
-                e.Y - selectedGameObject.collision.HalfHeight);
-                selectedGameObject.Y = e.Y - selectedGameObject.collision.HalfHeight;
-                selectedGameObject.X = e.X - selectedGameObject.collision.HalfWidth;
+                    new Vec2(e.X - selectedGameObject.Collision.HalfWidth,
+                e.Y - selectedGameObject.Collision.HalfHeight);
+                selectedGameObject.Y = e.Y - selectedGameObject.Collision.HalfHeight;
+                selectedGameObject.X = e.X - selectedGameObject.Collision.HalfWidth;
                 Invalidate();
             }
         }
@@ -189,9 +195,11 @@ namespace AdventureGame
                     Object tmp = new Saver();
                     var obj = tp.Item1;
                     ObjCopy(tmp, obj);
-                    ObjCopy(tmp, obj.collision);
+                    ObjCopy(tmp, obj.Collision);
                     Saver t = (Saver) tmp;
                     t.Filename = tp.Item2;
+                    t.X -= _x;
+                    t.Y -= _y;
                     js.Add(t);
                 }
                 File.WriteAllText(diag.FileName, JsonConvert.SerializeObject(js));
@@ -232,9 +240,9 @@ namespace AdventureGame
                 objects.Clear();
                 foreach (var tp in tmpList)
                 {
-                    var obj = new GameObject(tp.X, tp.Y, tp.Depth);
+                    var obj = new GameObject(tp.X + _x, tp.Y + _y, tp.Depth);
                     ObjCopy(obj, tp);
-                    ObjCopy(obj.collision, tp);
+                    ObjCopy(obj.Collision, tp);
                     objects.Add(new Tuple<GameObject, string>(
                         obj, tp.Filename));
                     if (!_pictureList.Contains(tp.Filename))

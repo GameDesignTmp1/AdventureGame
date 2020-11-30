@@ -21,7 +21,7 @@ namespace AdventureGame
             Location = location;
             ToLeft = turnLeft;
             GameObject = gameObject;
-            Collision = gameObject.collision;
+            Collision = gameObject.Collision;
             Transforms.Add(this);
             Location.X = gameObject.X;
             Location.Y = gameObject.Y;

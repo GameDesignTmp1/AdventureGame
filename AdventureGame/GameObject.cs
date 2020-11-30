@@ -11,11 +11,11 @@ namespace AdventureGame
     public class GameObject
     {
         public static List<GameObject> GameObjects = new List<GameObject>();
-        public Collision collision = null;
+        public Collision Collision = null;
+        public Music Music = null;
+        public Transform Transform = null;
         // 坐标，深度决定绘制的顺序
         public double X, Y, Depth;
-
-        public Transform Transform = null;
         // 静态物体待定义
         public bool IsStatic = false;
         public string Tag;
@@ -29,7 +29,7 @@ namespace AdventureGame
             Tag = tag;
             if (depth == 0)
             {
-                collision = new Collision(this);
+                Collision = new Collision(this);
                 Transform = new Transform(this, new Vec2(x, y), false);
             }
             GameObjects.Add(this);
@@ -40,7 +40,7 @@ namespace AdventureGame
             foreach (var gameObject in GameObjects)
             {
                 if (debug)
-                    gameObject.collision.Draw(gc);
+                    gameObject.Collision.Draw(gc);
 
             }
         }
@@ -58,9 +58,9 @@ namespace AdventureGame
             if (Transform != null)
                 Transform.Destroy();
             Transform = null;
-            if (collision != null)
-                collision.Destroy();
-            collision = null;
+            if (Collision != null)
+                Collision.Destroy();
+            Collision = null;
         }
         ~GameObject()
         {

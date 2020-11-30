@@ -37,7 +37,7 @@ namespace AdventureGame
             {
                 var obj = GenObjectFromTag(tp.Tag, tp.X, tp.Y);
                 ObjCopy(obj, tp);
-                ObjCopy(obj.collision, tp);
+                ObjCopy(obj.Collision, tp);
             }
         }
 

@@ -56,13 +56,13 @@ namespace AdventureGame
             gc.DrawRectangle(new Pen(Color.Red, 1), (int)(ct.X), (int)ct.Y, (int)HalfWidth * 2, 
                 (int)HalfHeight * 2);
         }
-        public void Draw(Graphics gc, Vec2 offset)
+        public void Draw(Graphics gc, Vec2 offset, double scale = 1)
         {
             var ct = GetCenter();
             gc.DrawRectangle(new Pen(Color.Red, 1), 
                 (int)(ct.X + offset.X), (int) (ct.Y + offset.Y), 
-                (int)HalfWidth * 2,
-                (int)HalfHeight * 2);
+                (int) (scale * HalfWidth * 2),
+                (int) (scale * HalfHeight * 2));
         }
         // 偏移，用于调整碰撞限度
         private double offset = 0;

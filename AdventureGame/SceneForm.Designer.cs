@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.panel2 = new System.Windows.Forms.Panel();
+            this.textBox21 = new System.Windows.Forms.TextBox();
+            this.textBox22 = new System.Windows.Forms.TextBox();
             this.textBox19 = new System.Windows.Forms.TextBox();
             this.textBox20 = new System.Windows.Forms.TextBox();
             this.textBox17 = new System.Windows.Forms.TextBox();
@@ -56,8 +58,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.textBox21 = new System.Windows.Forms.TextBox();
-            this.textBox22 = new System.Windows.Forms.TextBox();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -100,6 +100,22 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(245, 729);
             this.panel2.TabIndex = 1;
+            // 
+            // textBox21
+            // 
+            this.textBox21.Enabled = false;
+            this.textBox21.Location = new System.Drawing.Point(24, 637);
+            this.textBox21.Name = "textBox21";
+            this.textBox21.Size = new System.Drawing.Size(165, 25);
+            this.textBox21.TabIndex = 28;
+            this.textBox21.Text = "像素对齐（相对原点）";
+            // 
+            // textBox22
+            // 
+            this.textBox22.Location = new System.Drawing.Point(116, 668);
+            this.textBox22.Name = "textBox22";
+            this.textBox22.Size = new System.Drawing.Size(100, 25);
+            this.textBox22.TabIndex = 27;
             // 
             // textBox19
             // 
@@ -326,22 +342,6 @@
             this.pictureBox1.Size = new System.Drawing.Size(192, 175);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            // 
-            // textBox21
-            // 
-            this.textBox21.Enabled = false;
-            this.textBox21.Location = new System.Drawing.Point(24, 637);
-            this.textBox21.Name = "textBox21";
-            this.textBox21.Size = new System.Drawing.Size(165, 25);
-            this.textBox21.TabIndex = 28;
-            this.textBox21.Text = "像素对齐（相对原点）";
-            // 
-            // textBox22
-            // 
-            this.textBox22.Location = new System.Drawing.Point(116, 668);
-            this.textBox22.Name = "textBox22";
-            this.textBox22.Size = new System.Drawing.Size(100, 25);
-            this.textBox22.TabIndex = 27;
             // 
             // SceneForm
             // 
