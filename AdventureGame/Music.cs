@@ -8,7 +8,7 @@ using AxWMPLib;
 
 namespace AdventureGame
 {
-    class Music:IMusic
+    public class Music:IMusic
     {
         AxWindowsMediaPlayer axWindowsMediaPlayer = new AxWindowsMediaPlayer();
 
