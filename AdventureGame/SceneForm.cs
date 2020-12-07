@@ -15,8 +15,8 @@ namespace AdventureGame
 {
     public partial class SceneForm : Form
     {
-        private int _x, _y;
-        private bool _grab;
+        private int _x, _y; // 原点位置
+        private bool _grabRight, _grabLeft;
         private Point _point;
         private int _len = 3000;
         private double _scale = 1;
@@ -80,12 +80,14 @@ namespace AdventureGame
         private void ScaneForm_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
-                _grab = false;
+                _grabRight = false;
+            else if (e.Button == MouseButtons.Left)
+                _grabLeft = false;
         }
 
         private void ScaneForm_MouseMove(object sender, MouseEventArgs e)
         {
-            if (_grab)
+            if (_grabRight)
             {
                 int dx = e.X - _point.X;
                 int dy = e.Y - _point.Y;
@@ -95,7 +97,14 @@ namespace AdventureGame
                 }
                 _x += dx;
                 _y += dy;
-                _point = e.Location;
+                Invalidate();
+            }
+
+            if (_grabLeft)
+            {
+                int dx = e.X - _point.X;
+                int dy = e.Y - _point.Y;
+                selectedGameObject.Transform.Location += new Vec2(dx, dy);
                 Invalidate();
             }
 
@@ -109,6 +118,7 @@ namespace AdventureGame
                 selectedGameObject.Transform.Location = new Vec2(x, y);
                 Invalidate();
             }
+            _point = e.Location;
         }
 
         private void ScaneForm_MouseDown(object sender, MouseEventArgs e)
@@ -117,7 +127,7 @@ namespace AdventureGame
             {
                 case MouseButtons.Right:
                     _point = e.Location;
-                    _grab = true;
+                    _grabRight = true;
                     break;
                 case MouseButtons.Left:
                     if (_gen)
@@ -129,6 +139,7 @@ namespace AdventureGame
                             if (tuple.Item1.Texture.Detect(e.Location))
                             {
                                 selectedGameObject = tuple.Item1;
+                                _grabLeft = true;
                                 break;
                             }
                         }
