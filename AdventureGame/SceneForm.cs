@@ -46,8 +46,9 @@ namespace AdventureGame
             {
                 var obj = tuple.Item1;
                 double dx = (obj.X - _x) * _scale + xx, dy = (obj.Y - _y) * _scale + yy;
-                textBox23.Text = dx.ToString() + " " + dy.ToString();
-                tuple.Item1.Collision.Draw(gc, new Vec2(dx - obj.X, dy - obj.Y), _scale);
+                var p = new Vec2(dx - obj.X, dy - obj.Y);
+                obj.Texture.Draw(gc, p, _scale * 0.3);
+                obj.Collision.Draw(gc, p, _scale);
             }
         }
         // 缩放
@@ -103,8 +104,9 @@ namespace AdventureGame
                 selectedGameObject.Transform.Location = 
                     new Vec2(e.X - selectedGameObject.Collision.HalfWidth,
                 e.Y - selectedGameObject.Collision.HalfHeight);
-                selectedGameObject.Y = e.Y - selectedGameObject.Collision.HalfHeight;
-                selectedGameObject.X = e.X - selectedGameObject.Collision.HalfWidth;
+                var y = e.Y - selectedGameObject.Collision.HalfHeight;
+                var x = e.X - selectedGameObject.Collision.HalfWidth;
+                selectedGameObject.Transform.Location = new Vec2(x, y);
                 Invalidate();
             }
         }
@@ -120,9 +122,35 @@ namespace AdventureGame
                 case MouseButtons.Left:
                     if (_gen)
                         _gen = false;
-                    
+                    else
+                    {
+                        foreach (var tuple in objects)
+                        {
+                            if (tuple.Item1.Texture.Detect(e.Location))
+                            {
+                                selectedGameObject = tuple.Item1;
+                                break;
+                            }
+                        }
+                    }
                     break;
             }
+        }
+        // 更新显示信息
+        private void UpdateSelectedInfo()
+        {
+            if (selectedGameObject == null)
+                return;
+            BoxX.Text = selectedGameObject.X.ToString();
+            BoxY.Text = selectedGameObject.Y.ToString();
+            BoxDepth.Text = selectedGameObject.Depth.ToString();
+            BoxImgHeight.Text = selectedGameObject.Texture.Height.ToString();
+            BoxImgWidth.Text = selectedGameObject.Texture.Width.ToString();
+            BoxTag.Text = selectedGameObject.Tag;
+            BoxOffsetX.Text = selectedGameObject.Collision.OffsetX.ToString();
+            BoxOffsetY.Text = selectedGameObject.Collision.OffsetY.ToString();
+            BoxHalfHeight.Text = selectedGameObject.Collision.HalfHeight.ToString();
+            BoxHalfWidth.Text = selectedGameObject.Collision.HalfWidth.ToString();
         }
         // 根据当前贴图生成物体
         private void button1_Click(object sender, EventArgs e)
@@ -131,6 +159,8 @@ namespace AdventureGame
                 return;
             selectedGameObject = new GameObject(0, 0);
             var idx = comboBox1.SelectedIndex;
+            selectedGameObject.Texture.LoadTexture(_pictureList[idx]);
+            selectedGameObject.Texture.Resize(50, 50);
             objects.Add(new Tuple<GameObject, string>(selectedGameObject, _pictureList[idx]));
             _gen = true;
         }
@@ -162,6 +192,8 @@ namespace AdventureGame
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             var idx = comboBox1.SelectedIndex;
+            if (idx > _pictureList.Count)
+                return;
             var source = new Bitmap(_pictureList[idx]);
             Bitmap target = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             for (int i = 0; i < pictureBox1.Width; ++i)
@@ -181,6 +213,7 @@ namespace AdventureGame
         {
             public double X, Y, OffsetX, OffsetY, Depth;
             public double HalfWidth, HalfHeight;
+            public int Width, Height;
             public string Tag, Filename;
         }
         // 保存场景
@@ -196,6 +229,7 @@ namespace AdventureGame
                     var obj = tp.Item1;
                     ObjCopy(tmp, obj);
                     ObjCopy(tmp, obj.Collision);
+                    ObjCopy(tmp, obj.Texture);
                     Saver t = (Saver) tmp;
                     t.Filename = tp.Item2;
                     t.X -= _x;
@@ -241,8 +275,10 @@ namespace AdventureGame
                 foreach (var tp in tmpList)
                 {
                     var obj = new GameObject(tp.X + _x, tp.Y + _y, tp.Depth);
+                    obj.Texture.LoadTexture(tp.Filename);
                     ObjCopy(obj, tp);
                     ObjCopy(obj.Collision, tp);
+                    ObjCopy(obj.Texture, tp);
                     objects.Add(new Tuple<GameObject, string>(
                         obj, tp.Filename));
                     if (!_pictureList.Contains(tp.Filename))
@@ -256,9 +292,35 @@ namespace AdventureGame
         private void SceneForm_Load(object sender, EventArgs e)
         {
             Width = 1200;
-            Height = 600;
+            Height = 800;
             _x = Width / 2;
             _y = Height / 2;
+        }
+
+        private void 赋值_Click(object sender, EventArgs e)
+        {
+            if (selectedGameObject is null)
+                return;
+            selectedGameObject.Transform.Location.X = double.Parse(BoxX.Text);
+            selectedGameObject.Transform.Location.Y = double.Parse(BoxY.Text);
+            selectedGameObject.Collision.HalfHeight = double.Parse(BoxHalfHeight.Text);
+            selectedGameObject.Collision.HalfWidth = double.Parse(BoxHalfWidth.Text);
+            selectedGameObject.Depth = double.Parse(BoxDepth.Text);
+            selectedGameObject.Collision.OffsetX = double.Parse(BoxOffsetX.Text);
+            selectedGameObject.Collision.OffsetY = double.Parse(BoxOffsetY.Text);
+            selectedGameObject.Texture.Resize(int.Parse(BoxImgWidth.Text),
+                int.Parse(BoxImgHeight.Text));
+            selectedGameObject.Tag = BoxTag.Text;
+        }
+
+        private void 显示_Click(object sender, EventArgs e)
+        {
+            UpdateSelectedInfo();
+        }
+
+        private void 刷新_Click(object sender, EventArgs e)
+        {
+            Invalidate();
         }
 
         public static void ObjCopy(Object target, Object src)

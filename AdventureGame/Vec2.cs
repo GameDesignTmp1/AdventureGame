@@ -21,6 +21,12 @@ namespace AdventureGame
             Y = y;
         }
 
+        public Vec2(Vec2 v)
+        {
+            X = v.X;
+            Y = v.Y;
+        }
+
         public double Square()
         {
             return X * X + Y * Y;
@@ -47,6 +53,10 @@ namespace AdventureGame
             return new Vec2(v1.X - v2.X, v1.Y - v2.Y);
         }
 
+        public static Vec2 operator -(Vec2 v)
+        {
+            return new Vec2(-v.X, -v.Y);
+        }
         public override string ToString()
         {
             return "x:" + X.ToString(CultureInfo.InvariantCulture) + 

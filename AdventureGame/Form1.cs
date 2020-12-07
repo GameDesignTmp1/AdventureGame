@@ -40,21 +40,7 @@ namespace AdventureGame
         {
             base.OnPaint(e);
             Graphics gc = e.Graphics;
-            GameObject.Update(gc, true);
-            double left = 0, up = 0;
-            if (Input.IsKeyPress(Keys.A))
-                left -= 0.1;
-            if (Input.IsKeyPress(Keys.D))
-                left += 0.1;
-            if (Input.IsKeyPress(Keys.W))
-                up -= 0.1;
-            if (Input.IsKeyPress(Keys.S))
-                up += 0.1;
-            if (left == 0 && up == 0)
-                return;
-            left *= speed;
-            up *= speed;
-            o2.Transform.Translate(new Vec2(left, up));
+            Scene.Update(gc);
         }
 
         private void 设置场景ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -80,10 +66,6 @@ namespace AdventureGame
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            Time.Update();
-            Collision.Update();
-            Transform.Update();
-
             this.Invalidate();
         }
     }

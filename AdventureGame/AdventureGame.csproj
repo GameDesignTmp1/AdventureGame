@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera.cs" />
     <Compile Include="Collision.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="IAnimation.cs" />
@@ -74,6 +75,7 @@
     </Compile>
     <Compile Include="Time.cs" />
     <Compile Include="ITransform.cs" />
+    <Compile Include="TmpTexture.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="Vec2.cs" />
     <Compile Include="Vec3.cs" />

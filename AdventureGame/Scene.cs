@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,8 @@ namespace AdventureGame
             }
             catch (Exception exception)
             {
-                MessageBox.Show("场景文件加载错误，必须是合法的 Json 文件且不能有中文");
+                MessageBox.Show("场景文件加载错误，必须是合法的 Json 文件且不能有中文:"
+                                + exception.ToString());
                 return;
             }
 
@@ -38,9 +40,18 @@ namespace AdventureGame
                 var obj = GenObjectFromTag(tp.Tag, tp.X, tp.Y);
                 ObjCopy(obj, tp);
                 ObjCopy(obj.Collision, tp);
+                obj.Texture.LoadTexture(tp.Filename);
+                ObjCopy(obj.Texture, tp);
             }
         }
 
+        public static void Update(Graphics gc)
+        {
+            Time.Update();
+            Collision.Update();
+            Transform.Update();
+            GameObject.Update(gc, true);
+        }
         private static GameObject GenObjectFromTag(string tag, double x, double y)
         {
             GameObject obj = new GameObject(x, y);

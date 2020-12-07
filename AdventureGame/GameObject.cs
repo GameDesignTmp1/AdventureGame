@@ -14,8 +14,10 @@ namespace AdventureGame
         public Collision Collision = null;
         public Music Music = null;
         public Transform Transform = null;
+        public TmpTexture Texture = null;
         // 坐标，深度决定绘制的顺序
-        public double X, Y, Depth;
+        public double X, Y;
+        public double Depth;
         // 静态物体待定义
         public bool IsStatic = false;
         public string Tag;
@@ -32,16 +34,19 @@ namespace AdventureGame
                 Collision = new Collision(this);
                 Transform = new Transform(this, new Vec2(x, y), false);
             }
+            Texture = new TmpTexture(this);
             GameObjects.Add(this);
         }
         // 每帧调用，更新所有物体的状态
         public static void Update(Graphics gc, bool debug = false)
         {
+            Vec2 offset = new Vec2(Camera.GetCenter());
+            offset = -offset;
             foreach (var gameObject in GameObjects)
             {
                 if (debug)
-                    gameObject.Collision.Draw(gc);
-
+                    gameObject.Collision.Draw(gc, offset);
+                gameObject.Texture.Draw(gc, offset);
             }
         }
         // 碰撞发生时
