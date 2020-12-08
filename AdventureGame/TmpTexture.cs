@@ -58,17 +58,16 @@ namespace AdventureGame
         }
         public void Resize(int x, int y)
         {
-            if (x > image.Width || y > image.Height)
-                return;
             Width = x;
             Height = y;
             var tm = new Bitmap(Width, Height);
             for (int i = 0; i < Width; i++)
             {
-                int ii = i * image.Width / Width;
+                int ii = i * image.Width / Width % image.Width;
                 for (int j = 0; j < Height; j++)
                 {
-                    tm.SetPixel(i, j, image.GetPixel(ii, j * image.Height / Height));
+                    tm.SetPixel(i, j, 
+                        image.GetPixel(ii, j * image.Height / Height % image.Height));
                 }
             }
 

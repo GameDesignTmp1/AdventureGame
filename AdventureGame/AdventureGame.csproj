@@ -76,6 +76,7 @@
     </Compile>
     <Compile Include="Time.cs" />
     <Compile Include="ITransform.cs" />
+    <Compile Include="TmpAnimation.cs" />
     <Compile Include="TmpTexture.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="Vec2.cs" />

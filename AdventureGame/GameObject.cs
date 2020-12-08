@@ -85,6 +85,10 @@ namespace AdventureGame
             if (Collision != null)
                 Collision.Destroy();
             Collision = null;
+            if (Texture != null)
+                Texture.Destroy();
+            Texture = null;
+            
         }
         ~GameObject()
         {
