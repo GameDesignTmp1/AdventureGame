@@ -58,7 +58,7 @@ namespace AdventureGame
         }
         public void Draw(Graphics gc, Vec2 offset, double scale = 1)
         {
-            var ct = GetCenter();
+            var ct = GetCorner();
             gc.DrawRectangle(new Pen(Color.Red, 1), 
                 (int)(ct.X + offset.X), (int) (ct.Y + offset.Y), 
                 (int) (scale * HalfWidth * 2),
@@ -122,9 +122,14 @@ namespace AdventureGame
             }
         }
 
-        private Vec2 GetCenter()
+        private Vec2 GetCorner()
         {
             return new Vec2(OffsetX + GameObject.X, OffsetY + GameObject.Y);
+        }
+        private Vec2 GetCenter()
+        {
+            return new Vec2(OffsetX + GameObject.X + HalfWidth, 
+                OffsetY + GameObject.Y + HalfHeight);
         }
         // 判断是否碰撞，边缘重合也算
         private bool Collide(Collision other)
@@ -237,7 +242,7 @@ namespace AdventureGame
             }
         }
         // 更新所有碰撞体信息
-        public static void Update()
+        public void Update(bool debug = false)
         {
             for (int i = 0; i < Collisions.Count; ++i)
             {

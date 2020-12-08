@@ -15,6 +15,7 @@ namespace AdventureGame
         void Draw(Graphics gc, double scale = 1);
         void Draw(Graphics gc, Vec2 offset, double scale = 1);
         void Resize(int x, int y);
+        void TmpResize(double scale); // 改变当前显示的图片大小，但是不改变属性中的大小
         void Destroy();
     }
 }

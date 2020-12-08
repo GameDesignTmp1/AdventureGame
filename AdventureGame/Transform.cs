@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AdventureGame
 {
@@ -11,9 +12,10 @@ namespace AdventureGame
         public GameObject GameObject;
         public Collision Collision;
         public bool UseGravity = false;
-        public double Gravity = 9.8;
+        public double GravityRate = 9.8;
         public Vec2 Velocity = new Vec2();
-        private double _gravityRate = 10;
+        private double _gravityVelocity = 0;
+        private double _gravityRate = 1;
         public bool IsValid = true;
 
         public Transform(GameObject gameObject, Vec2 location, bool turnLeft)
@@ -31,7 +33,9 @@ namespace AdventureGame
         public void Translate(Vec2 dir)
         {
             var d = Collision.GetMoveDis(dir);
+            Scene.DebugControl.Text = d.ToString() + " ";
             Location += d;
+            Scene.DebugControl.Text += Location.ToString() + " ";
         }
 
         private void UpdateGravity()
@@ -39,9 +43,9 @@ namespace AdventureGame
             if (!UseGravity)
                 return;
             
-            Velocity.Y += Gravity * _gravityRate * Time.DeltaTime;
-            var tmp = Collision.GetMoveDis(Velocity * Time.DeltaTime);
-
+            _gravityVelocity += GravityRate * _gravityRate;
+            var tmp = Collision.GetMoveDis(new Vec2(0, _gravityVelocity) * Time.DeltaTime);
+            _gravityVelocity = tmp.Y / Time.DeltaTime;
             Location += tmp;
         }
 
@@ -54,14 +58,6 @@ namespace AdventureGame
             GameObject.X = Location.X;
             GameObject.Y = Location.Y;
             _preLoc = Location;
-        }
-
-        public static void Update()
-        {
-            foreach (var transform in Transforms)
-            {
-                transform.UpdateTransform();
-            }
         }
 
         public Vec2 GetVelocity()

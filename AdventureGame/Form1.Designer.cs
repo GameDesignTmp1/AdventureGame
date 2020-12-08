@@ -46,9 +46,9 @@
             // textBox1
             // 
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(585, 70);
+            this.textBox1.Location = new System.Drawing.Point(456, 70);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(164, 25);
+            this.textBox1.Size = new System.Drawing.Size(293, 25);
             this.textBox1.TabIndex = 0;
             // 
             // menuStrip1

@@ -13,6 +13,7 @@ namespace AdventureGame
     public static class Scene
     {
         public static Vec2 Offset;
+        public static Control DebugControl = null;
         public static void LoadScene(string filename)
         {
             byte[] str = new byte[10240];
@@ -42,28 +43,29 @@ namespace AdventureGame
                 ObjCopy(obj.Collision, tp);
                 obj.Texture.LoadTexture(tp.Filename);
                 ObjCopy(obj.Texture, tp);
+                obj.Texture.Resize(obj.Texture.Width, obj.Texture.Height);
             }
         }
 
         public static void Update(Graphics gc)
         {
             Time.Update();
-            Collision.Update();
-            Transform.Update();
             GameObject.Update(gc, true);
         }
         private static GameObject GenObjectFromTag(string tag, double x, double y)
         {
-            GameObject obj = new GameObject(x, y);
+            GameObject obj = null;
             switch (tag)
             {
                 case "Player":
+                    obj = new Player(x, y);
                     break;
                 case "Background":
                     break;
                 case "Building":
                     break;
                 default:
+                    obj = new GameObject(x, y);
                     break;
             }
 

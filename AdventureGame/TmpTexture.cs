@@ -16,6 +16,7 @@ namespace AdventureGame
         public int Width, Height;
         private Bitmap image = null;
         private Bitmap showBitmap = null;
+        private int _w, _h; // 临时大小
 
         public TmpTexture(GameObject gameObject)
         {
@@ -41,10 +42,9 @@ namespace AdventureGame
         {
             if (image is null)
                 return;
-            if (Width != showBitmap.Width || Height != showBitmap.Height)
-                Resize(Width, Height);
+
             gc.DrawImage(showBitmap, 
-                new Point((int) (GameObject.X + offset.X), (int) (GameObject.Y + offset.Y)));
+                new Point((int) (GameObject.X + offset.X),(int) (GameObject.Y + offset.Y)));
         }
 
         public static void DrawAllTextures(Graphics gc)
@@ -67,6 +67,27 @@ namespace AdventureGame
                 for (int j = 0; j < Height; j++)
                 {
                     tm.SetPixel(i, j, image.GetPixel(ii, j * image.Height / Height));
+                }
+            }
+
+            showBitmap = tm;
+        }
+
+        public void TmpResize(double scale)
+        {
+            _w = (int) (Width * scale);
+            _h = (int) (Height * scale);
+            if (_w >= image.Width || _h >= image.Height)
+                return;
+
+            var tm = new Bitmap(_w, _h);
+            for (int i = 0; i < _w; i++)
+            {
+                int ii = i * image.Width / _w % image.Width;
+                for (int j = 0; j < _h; j++)
+                {
+                    var color = image.GetPixel(ii, j * image.Height / _h % image.Height);
+                    tm.SetPixel(i, j, color);
                 }
             }
 

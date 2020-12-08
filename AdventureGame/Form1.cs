@@ -13,16 +13,12 @@ namespace AdventureGame
 {
     public partial class Form1 : Form
     {
-        private GameObject o1, o2, o3;
+        private Player p;
         public Form1()
         {
             InitializeComponent();
             Time.Init();
-            o1 = new GameObject(0, 0);
-            o2 = new GameObject(39, 45);
-            o3 = new GameObject(-10, 60);
-            o2.Transform.UseGravity = false;
-            o1.Transform.UseGravity = true;
+            Scene.DebugControl = textBox1;
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -41,6 +37,16 @@ namespace AdventureGame
             base.OnPaint(e);
             Graphics gc = e.Graphics;
             Scene.Update(gc);
+            GameObject obj = null;
+            foreach (var gameObject in GameObject.GameObjects)
+            {
+                if (gameObject.Tag == "Player")
+                {
+                    obj = gameObject;
+                    break;
+                }
+            }
+
         }
 
         private void 设置场景ToolStripMenuItem_Click(object sender, EventArgs e)

@@ -44,9 +44,11 @@ namespace AdventureGame
             offset = -offset;
             foreach (var gameObject in GameObjects)
             {
+                gameObject.Texture.Draw(gc, offset);
                 if (debug)
                     gameObject.Collision.Draw(gc, offset);
-                gameObject.Texture.Draw(gc, offset);
+                gameObject.Transform.UpdateTransform();
+                gameObject.Update();
             }
         }
         // 碰撞发生时
@@ -55,6 +57,10 @@ namespace AdventureGame
         public virtual void OnTriggerExit(List<GameObject> gameObjects){}
         // 有碰撞体驻留时
         public virtual void OnTriggerStay(List<GameObject> gameObjects){}
+        // 每帧更新逻辑
+        public virtual void Update()
+        {
+        }
 
         public void Destroy()
         {

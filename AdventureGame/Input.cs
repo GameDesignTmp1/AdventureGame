@@ -23,7 +23,7 @@ namespace AdventureGame
             if (Key.Contains(e.KeyCode))
                 Key.Remove(e.KeyCode);
         }
-
+        // 获取输入
         public static bool IsKeyPress(Keys key)
         {
             return Key.Contains(key);

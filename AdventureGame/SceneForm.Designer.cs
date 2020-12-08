@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.panel2 = new System.Windows.Forms.Panel();
+            this.刷新 = new System.Windows.Forms.Button();
+            this.显示 = new System.Windows.Forms.Button();
+            this.赋值 = new System.Windows.Forms.Button();
             this.textBox21 = new System.Windows.Forms.TextBox();
             this.textBox22 = new System.Windows.Forms.TextBox();
             this.textBox19 = new System.Windows.Forms.TextBox();
@@ -58,9 +61,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.赋值 = new System.Windows.Forms.Button();
-            this.显示 = new System.Windows.Forms.Button();
-            this.刷新 = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -106,6 +106,36 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(245, 729);
             this.panel2.TabIndex = 1;
+            // 
+            // 刷新
+            // 
+            this.刷新.Location = new System.Drawing.Point(89, 307);
+            this.刷新.Name = "刷新";
+            this.刷新.Size = new System.Drawing.Size(59, 41);
+            this.刷新.TabIndex = 31;
+            this.刷新.Text = "刷新";
+            this.刷新.UseVisualStyleBackColor = true;
+            this.刷新.Click += new System.EventHandler(this.刷新_Click);
+            // 
+            // 显示
+            // 
+            this.显示.Location = new System.Drawing.Point(24, 307);
+            this.显示.Name = "显示";
+            this.显示.Size = new System.Drawing.Size(59, 41);
+            this.显示.TabIndex = 30;
+            this.显示.Text = "显示";
+            this.显示.UseVisualStyleBackColor = true;
+            this.显示.Click += new System.EventHandler(this.显示_Click);
+            // 
+            // 赋值
+            // 
+            this.赋值.Location = new System.Drawing.Point(157, 260);
+            this.赋值.Name = "赋值";
+            this.赋值.Size = new System.Drawing.Size(59, 41);
+            this.赋值.TabIndex = 29;
+            this.赋值.Text = "赋值";
+            this.赋值.UseVisualStyleBackColor = true;
+            this.赋值.Click += new System.EventHandler(this.赋值_Click);
             // 
             // textBox21
             // 
@@ -353,41 +383,12 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Location = new System.Drawing.Point(24, 50);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(192, 175);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            // 
-            // 赋值
-            // 
-            this.赋值.Location = new System.Drawing.Point(157, 260);
-            this.赋值.Name = "赋值";
-            this.赋值.Size = new System.Drawing.Size(59, 41);
-            this.赋值.TabIndex = 29;
-            this.赋值.Text = "赋值";
-            this.赋值.UseVisualStyleBackColor = true;
-            this.赋值.Click += new System.EventHandler(this.赋值_Click);
-            // 
-            // 显示
-            // 
-            this.显示.Location = new System.Drawing.Point(24, 307);
-            this.显示.Name = "显示";
-            this.显示.Size = new System.Drawing.Size(59, 41);
-            this.显示.TabIndex = 30;
-            this.显示.Text = "显示";
-            this.显示.UseVisualStyleBackColor = true;
-            this.显示.Click += new System.EventHandler(this.显示_Click);
-            // 
-            // 刷新
-            // 
-            this.刷新.Location = new System.Drawing.Point(89, 307);
-            this.刷新.Name = "刷新";
-            this.刷新.Size = new System.Drawing.Size(59, 41);
-            this.刷新.TabIndex = 31;
-            this.刷新.Text = "刷新";
-            this.刷新.UseVisualStyleBackColor = true;
-            this.刷新.Click += new System.EventHandler(this.刷新_Click);
             // 
             // SceneForm
             // 

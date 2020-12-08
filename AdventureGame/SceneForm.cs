@@ -67,6 +67,11 @@ namespace AdventureGame
             }
             else
                 return;
+
+            foreach (var tuple in objects)
+            {
+                tuple.Item1.Texture.TmpResize(_scale);
+            }
             Invalidate();
         }
 
@@ -140,6 +145,7 @@ namespace AdventureGame
                             {
                                 selectedGameObject = tuple.Item1;
                                 _grabLeft = true;
+                                UpdateSelectedInfo();
                                 break;
                             }
                         }
@@ -194,7 +200,8 @@ namespace AdventureGame
                 var names = diag.FileNames;
                 foreach (var name in names)
                 {
-                    _pictureList.Add(name);
+                    if (!_pictureList.Contains(name))
+                        _pictureList.Add(name);
                 }
             }
             UpdatePicList();
@@ -203,7 +210,7 @@ namespace AdventureGame
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             var idx = comboBox1.SelectedIndex;
-            if (idx > _pictureList.Count)
+            if (idx >= _pictureList.Count)
                 return;
             var source = new Bitmap(_pictureList[idx]);
             Bitmap target = new Bitmap(pictureBox1.Width, pictureBox1.Height);
@@ -290,12 +297,15 @@ namespace AdventureGame
                     ObjCopy(obj, tp);
                     ObjCopy(obj.Collision, tp);
                     ObjCopy(obj.Texture, tp);
+                    obj.Texture.Resize(obj.Texture.Width, obj.Texture.Height);
                     objects.Add(new Tuple<GameObject, string>(
                         obj, tp.Filename));
                     if (!_pictureList.Contains(tp.Filename))
                         _pictureList.Add(tp.Filename);
                 }
                 UpdatePicList();
+                if (_pictureList.Count > 0)
+                    comboBox1.SelectedIndex = 0;
                 Invalidate();
             }
         }
