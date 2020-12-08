@@ -42,9 +42,11 @@ namespace AdventureGame
         {
             if (image is null)
                 return;
-
-            gc.DrawImage(showBitmap, 
-                new Point((int) (GameObject.X + offset.X),(int) (GameObject.Y + offset.Y)));
+            if (offset.X != 0 || offset.Y != 0)
+                ;
+            gc.DrawImage(showBitmap,
+                new Point((int) (GameObject.X + offset.X) - showBitmap.Width / 2,
+                    (int) (GameObject.Y + offset.Y) - showBitmap.Height / 2));
         }
 
         public static void DrawAllTextures(Graphics gc)
@@ -101,22 +103,22 @@ namespace AdventureGame
 
         private int MinX()
         {
-            return (int) GameObject.X;
+            return (int) GameObject.X - showBitmap.Width / 2;
         }
 
         private int MaxX()
         {
-            return (int) (GameObject.X + Width);
+            return (int) (GameObject.X + Width / 2);
         }
 
         private int MinY()
         {
-            return (int) GameObject.Y;
+            return (int) GameObject.Y - showBitmap.Height / 2;
         }
 
         private int MaxY()
         {
-            return (int) (GameObject.Y + Height);
+            return (int) (GameObject.Y + Height / 2);
         }
 
         public void Destroy()

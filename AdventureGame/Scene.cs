@@ -14,8 +14,20 @@ namespace AdventureGame
     {
         public static Vec2 Offset;
         public static Control DebugControl = null;
+        public static List<string> Tags = new List<string>();
+
+        private static void InitTags()
+        {
+            Tags.Add("Building");
+            Tags.Add("Player");
+            Tags.Add("Enemy");
+            Tags.Add("Weapon");
+            Tags.Add("Background");
+            Tags.Add("Foreground");
+        }
         public static void LoadScene(string filename)
         {
+            InitTags();
             byte[] str = new byte[10240];
             int length = File.Open(filename, FileMode.Open).Read(str, 0, 10240);
             string s = Encoding.Default.GetString(str);
@@ -55,14 +67,29 @@ namespace AdventureGame
         private static GameObject GenObjectFromTag(string tag, double x, double y)
         {
             GameObject obj = null;
+            if (!Tags.Contains(tag))
+                tag = "Building";
             switch (tag)
             {
                 case "Player":
                     obj = new Player(x, y);
+                    obj.Depth = 0;
                     break;
                 case "Background":
+                    obj = new GameObject(x, y);
+                    obj.Depth = -1;
                     break;
                 case "Building":
+                    obj = new GameObject(x, y);
+                    obj.Depth = 0;
+                    break;
+                case "ForeGround":
+                    obj = new GameObject(x, y);
+                    obj.Depth = 1;
+                    break;
+                case "Weapon":
+                    obj = new GameObject(x, y);
+                    obj.Depth = 0;
                     break;
                 default:
                     obj = new GameObject(x, y);
@@ -74,6 +101,8 @@ namespace AdventureGame
 
         public static void ObjCopy(Object target, Object src)
         {
+            if (target is null || src is null)
+                return;
             var info1 = target.GetType().GetFields();
             var info2 = src.GetType().GetFields();
             foreach (var targetInfo in info1)

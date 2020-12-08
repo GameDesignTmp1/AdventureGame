@@ -26,6 +26,8 @@ namespace AdventureGame
             var now = DateTime.Now;
             var delta = now - LastTime;
             var tmp = delta.TotalMilliseconds * 0.001;
+            if (tmp > 0.1)
+                tmp = 0.01;
             DeltaTime = DeltaTime * (1 - _fixRate) + _fixRate * tmp;
             LastTime = now;
             TotalTime = (now - StartTime).Milliseconds * 0.001;

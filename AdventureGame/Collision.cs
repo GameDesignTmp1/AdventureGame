@@ -124,7 +124,8 @@ namespace AdventureGame
 
         private Vec2 GetCorner()
         {
-            return new Vec2(OffsetX + GameObject.X, OffsetY + GameObject.Y);
+            return new Vec2(OffsetX + GameObject.X - HalfWidth,
+                OffsetY + GameObject.Y - HalfHeight);
         }
         private Vec2 GetCenter()
         {

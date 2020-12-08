@@ -10,6 +10,17 @@ namespace AdventureGame
 {
     public class GameObject
     {
+        private class Sorter : IComparer<GameObject>
+        {
+            public int Compare(GameObject x, GameObject y)
+            {
+                if (x.Depth > y.Depth)
+                    return 1;
+                else if (x.Depth < y.Depth)
+                    return -1;
+                return 0;
+            }
+        }
         public static List<GameObject> GameObjects = new List<GameObject>();
         public Collision Collision = null;
         public Music Music = null;
@@ -36,7 +47,9 @@ namespace AdventureGame
             }
             Texture = new TmpTexture(this);
             GameObjects.Add(this);
+            GameObjects.Sort(new Sorter());
         }
+
         // 每帧调用，更新所有物体的状态
         public static void Update(Graphics gc, bool debug = false)
         {

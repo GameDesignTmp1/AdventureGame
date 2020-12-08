@@ -47,7 +47,7 @@ namespace AdventureGame
                 var obj = tuple.Item1;
                 double dx = (obj.X - _x) * _scale + xx, dy = (obj.Y - _y) * _scale + yy;
                 var p = new Vec2(dx - obj.X, dy - obj.Y);
-                obj.Texture.Draw(gc, p, _scale * 0.3);
+                obj.Texture.Draw(gc, p);
                 obj.Collision.Draw(gc, p, _scale);
             }
         }
@@ -115,12 +115,7 @@ namespace AdventureGame
 
             if (_gen)
             {
-                selectedGameObject.Transform.Location = 
-                    new Vec2(e.X - selectedGameObject.Collision.HalfWidth,
-                e.Y - selectedGameObject.Collision.HalfHeight);
-                var y = e.Y - selectedGameObject.Collision.HalfHeight;
-                var x = e.X - selectedGameObject.Collision.HalfWidth;
-                selectedGameObject.Transform.Location = new Vec2(x, y);
+                selectedGameObject.Transform.Location = new Vec2(e.X, e.Y);
                 Invalidate();
             }
             _point = e.Location;
@@ -212,7 +207,18 @@ namespace AdventureGame
             var idx = comboBox1.SelectedIndex;
             if (idx >= _pictureList.Count)
                 return;
-            var source = new Bitmap(_pictureList[idx]);
+            Bitmap source = null;
+            try
+            {
+                source = new Bitmap(_pictureList[idx]);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                MessageBox.Show("图片格式错误");
+                return;
+            }
+
             Bitmap target = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             for (int i = 0; i < pictureBox1.Width; ++i)
             {
@@ -339,6 +345,31 @@ namespace AdventureGame
             UpdateSelectedInfo();
         }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            foreach (var tuple in objects)
+            {
+                tuple.Item1.Transform.UpdateTransform();
+            }
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+
+        }
+        // 销毁物体
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (selectedGameObject is null)
+                return;
+            int idx;
+            for (idx = 0;idx < objects.Count;++idx)
+                if (objects[idx].Item1 == selectedGameObject)
+                    break;
+            objects.RemoveAt(idx);
+            selectedGameObject.Destroy();
+        }
+
         private void 刷新_Click(object sender, EventArgs e)
         {
             Invalidate();
@@ -346,6 +377,8 @@ namespace AdventureGame
 
         public static void ObjCopy(Object target, Object src)
         {
+            if (target is null || src is null)
+                return;
             var info1 = target.GetType().GetFields();
             var info2 = src.GetType().GetFields();
             foreach (var targetInfo in info1)
