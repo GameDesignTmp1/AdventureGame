@@ -55,6 +55,7 @@ namespace AdventureGame
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
+            return;
             if (e.Delta > 0)
             {
                 if (_scale < 1.8)
