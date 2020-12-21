@@ -18,7 +18,7 @@ namespace AdventureGame
         public double OffsetX = 0, OffsetY = 0;
         public double HalfWidth = 20, HalfHeight = 20;
         public GameObject GameObject;
-        public bool IsTrigger = false;
+        public bool IsTrigger = true;
         // 被设置为刚体的物体能够阻止其他物体前进
         public bool IsRigid = true;
         public bool IsValid = true;
@@ -135,8 +135,9 @@ namespace AdventureGame
         // 判断是否碰撞，边缘重合也算
         private bool Collide(Collision other)
         {
-            return other.IsTrigger && !(other.GetMaxX() < GetMinX() || other.GetMinX() > GetMaxX()
-                || other.GetMaxY() < GetMinY() || other.GetMinY() > GetMaxY());
+            return other.IsTrigger && other.IsValid && !(other.GetMaxX() < GetMinX() || 
+                other.GetMinX() > GetMaxX() || other.GetMaxY() < GetMinY() || 
+                other.GetMinY() > GetMaxY());
         }
         // 判断是否重合，边缘重合不算，这样做的目的是为了使两个物体能够产生紧贴的状态
         // 如此 Collide 函数才能够生效
@@ -176,11 +177,14 @@ namespace AdventureGame
             return GameObject.Y + OffsetY + HalfHeight;
         }
         // 更新这一帧碰到的碰撞体，上一帧仍然留着的碰撞体，这一帧离开的碰撞体，顺便调用物体的触发函数
-        private void UpdateCollide()
+        public void UpdateCollide()
         {
+            if (!IsTrigger)
+                return;
             _exitCollisions.Clear();
-            foreach (var col in _stayCollisions)
+            for (int i = _stayCollisions.Count - 1;i >= 0;i--)
             {
+                var col = _stayCollisions[i];
                 if (!col.IsValid)
                     _stayCollisions.Remove(col);
                 else if (!Collide(col))
@@ -189,8 +193,9 @@ namespace AdventureGame
                     _stayCollisions.Remove(col);
                 }
             }
-            foreach (var col in _enterCollisions)
+            for (int i = _enterCollisions.Count - 1;i >= 0;i--)
             {
+                var col = _enterCollisions[i];
                 if (!Collide(col) && col.IsValid)
                     _exitCollisions.Add(col);
                 else
@@ -200,7 +205,8 @@ namespace AdventureGame
 
             for (int i = 0; i < Collisions.Count; ++i)
             {
-                if (Collisions[i] != this && Collisions[i].IsValid && Collide(Collisions[i]))
+                var col = Collisions[i];
+                if (col != this && !_stayCollisions.Contains(col) && col.IsValid && Collide(col))
                 {
                     _enterCollisions.Add(Collisions[i]);
                 }

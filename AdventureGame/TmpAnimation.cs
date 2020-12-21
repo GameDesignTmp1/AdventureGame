@@ -10,14 +10,17 @@ namespace AdventureGame
 {
     public class TmpAnimation : IAnimation
     {
+        public static List<TmpAnimation> Anims = new List<TmpAnimation>();
         public List<TmpTexture> Animations = new List<TmpTexture>();
         public GameObject GameObject;
         public bool IsPlay = true;
         private int _playRate = 1;
         private double _cnt = 0;
-        public TmpAnimation(GameObject obj)
+        public TmpAnimation(GameObject obj, string texFolder)
         {
             GameObject = obj;
+            LoadAnimation(texFolder);
+            Anims.Add(this);
         }
         public void LoadAnimation(string texFolder)
         {
@@ -34,11 +37,10 @@ namespace AdventureGame
                 {
                     continue;
                 }
-                tex.Resize(GameObject.Texture.Width, GameObject.Texture.Height);
                 Animations.Add(tex);
             }
         }
-        public void Play(Graphics gc, Vec2 offset)
+        public void Draw(Graphics gc, Vec2 offset)
         {
             if (!IsPlay || Animations.Count <= 0)
                 return;
@@ -46,11 +48,28 @@ namespace AdventureGame
             Animations[(int)(_cnt * _playRate) % Animations.Count].Draw(gc, offset);
         }
 
+        public void Init()
+        {
+            foreach (var tex in Animations)
+            {
+                tex.Resize(GameObject.Texture.Width, GameObject.Texture.Height);
+            }
+        }
+        public static void DrawAll(Graphics gc, Vec2 offset)
+        {
+            foreach (var anim in Anims)
+            {
+                anim.Draw(gc, offset);
+            }
+        }
         public void Pause()
         {
             IsPlay = false;
         }
-
+        public void Play()
+        {
+            IsPlay = true;
+        }
         public void Reset()
         {
             _cnt = 0;
@@ -63,6 +82,8 @@ namespace AdventureGame
             {
                 tex.Destroy();
             }
+
+            Anims.Remove(this);
         }
     }
 }

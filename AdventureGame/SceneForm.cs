@@ -48,7 +48,7 @@ namespace AdventureGame
                 double dx = (obj.X - _x) * _scale + xx, dy = (obj.Y - _y) * _scale + yy;
                 var p = new Vec2(dx - obj.X, dy - obj.Y);
                 obj.Texture.Draw(gc, p);
-                obj.Collision.Draw(gc, p, _scale);
+                obj.Collision?.Draw(gc, p, _scale);
             }
         }
         // 缩放
@@ -135,8 +135,9 @@ namespace AdventureGame
                         _gen = false;
                     else
                     {
-                        foreach (var tuple in objects)
+                        for (int i = objects.Count - 1;i >= 0;i--)
                         {
+                            var tuple = objects[i];
                             if (tuple.Item1.Texture.Detect(e.Location))
                             {
                                 selectedGameObject = tuple.Item1;
@@ -160,15 +161,18 @@ namespace AdventureGame
             BoxImgHeight.Text = selectedGameObject.Texture.Height.ToString();
             BoxImgWidth.Text = selectedGameObject.Texture.Width.ToString();
             BoxTag.Text = selectedGameObject.Tag;
-            BoxOffsetX.Text = selectedGameObject.Collision.OffsetX.ToString();
-            BoxOffsetY.Text = selectedGameObject.Collision.OffsetY.ToString();
-            BoxHalfHeight.Text = selectedGameObject.Collision.HalfHeight.ToString();
-            BoxHalfWidth.Text = selectedGameObject.Collision.HalfWidth.ToString();
+            if (selectedGameObject.Collision != null)
+            {
+                BoxOffsetX.Text = selectedGameObject.Collision.OffsetX.ToString();
+                BoxOffsetY.Text = selectedGameObject.Collision.OffsetY.ToString();
+                BoxHalfHeight.Text = selectedGameObject.Collision.HalfHeight.ToString();
+                BoxHalfWidth.Text = selectedGameObject.Collision.HalfWidth.ToString();
+            }
         }
         // 根据当前贴图生成物体
         private void button1_Click(object sender, EventArgs e)
         {
-            if (_pictureList.Count <= 0)
+            if (_pictureList.Count <= 0 || comboBox1.SelectedIndex < 0)
                 return;
             selectedGameObject = new GameObject(0, 0);
             var idx = comboBox1.SelectedIndex;
@@ -176,6 +180,7 @@ namespace AdventureGame
             selectedGameObject.Texture.Resize(50, 50);
             objects.Add(new Tuple<GameObject, string>(selectedGameObject, _pictureList[idx]));
             _gen = true;
+            赋值_Click(null, null);
         }
         // 更新贴图列表
         private void UpdatePicList()
@@ -193,11 +198,14 @@ namespace AdventureGame
             var diag = new OpenFileDialog();
             if (diag.ShowDialog() == DialogResult.OK)
             {
+                var cur = ".\\" + "image\\";
                 var names = diag.FileNames;
                 foreach (var name in names)
                 {
-                    if (!_pictureList.Contains(name))
-                        _pictureList.Add(name);
+                    var t = cur + name.Split('\\').Last();
+                    File.Copy(name, t, true);
+                    if (!_pictureList.Contains(t))
+                        _pictureList.Add(t);
                 }
             }
             UpdatePicList();
@@ -331,11 +339,14 @@ namespace AdventureGame
                 return;
             selectedGameObject.Transform.Location.X = double.Parse(BoxX.Text);
             selectedGameObject.Transform.Location.Y = double.Parse(BoxY.Text);
-            selectedGameObject.Collision.HalfHeight = double.Parse(BoxHalfHeight.Text);
-            selectedGameObject.Collision.HalfWidth = double.Parse(BoxHalfWidth.Text);
+            if (selectedGameObject.Collision != null)
+            {
+                selectedGameObject.Collision.HalfHeight = double.Parse(BoxHalfHeight.Text);
+                selectedGameObject.Collision.HalfWidth = double.Parse(BoxHalfWidth.Text);
+                selectedGameObject.Collision.OffsetX = double.Parse(BoxOffsetX.Text);
+                selectedGameObject.Collision.OffsetY = double.Parse(BoxOffsetY.Text);
+            }
             selectedGameObject.Depth = double.Parse(BoxDepth.Text);
-            selectedGameObject.Collision.OffsetX = double.Parse(BoxOffsetX.Text);
-            selectedGameObject.Collision.OffsetY = double.Parse(BoxOffsetY.Text);
             selectedGameObject.Texture.Resize(int.Parse(BoxImgWidth.Text),
                 int.Parse(BoxImgHeight.Text));
             selectedGameObject.Tag = BoxTag.Text;
@@ -373,6 +384,7 @@ namespace AdventureGame
 
         private void 刷新_Click(object sender, EventArgs e)
         {
+            objects.Sort(new Sorter());
             Invalidate();
         }
 
@@ -393,6 +405,17 @@ namespace AdventureGame
                     }
                 }
             }
+        }
+    }
+    public class Sorter : IComparer<Tuple<GameObject, string>>
+    {
+        public int Compare(Tuple<GameObject, string> x, Tuple<GameObject, string> y)
+        {
+            if (x.Item1.Depth > y.Item1.Depth)
+                return 1;
+            else if (x.Item1.Depth < y.Item1.Depth)
+                return -1;
+            return 0;
         }
     }
 }

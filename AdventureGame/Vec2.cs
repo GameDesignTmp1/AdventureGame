@@ -85,7 +85,10 @@ namespace AdventureGame
 
         public Vec2 Normalize()
         {
-            return this / Length();
+            var len = Length();
+            if (Length() < 0.001)
+                return this * 10000;
+            return this / len;
         }
     }
 }

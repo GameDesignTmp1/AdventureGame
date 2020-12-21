@@ -32,10 +32,10 @@ namespace AdventureGame
         // 位移
         public void Translate(Vec2 dir)
         {
+            if (GameObject.Tag == "Enemy")
+                Scene.DebugControl.Text = dir.ToString();
             var d = Collision.GetMoveDis(dir);
-            Scene.DebugControl.Text = d.ToString() + " ";
             Location += d;
-            Scene.DebugControl.Text += Location.ToString() + " ";
         }
 
         private void UpdateGravity()

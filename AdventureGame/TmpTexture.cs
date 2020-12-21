@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,8 +13,9 @@ namespace AdventureGame
     {
         public static List<TmpTexture> textures = new List<TmpTexture>();
         public GameObject GameObject;
-
         public int Width, Height;
+        public bool IsValid = true;
+        private bool _left = false;
         private Bitmap image = null;
         private Bitmap showBitmap = null;
         private int _w, _h; // 临时大小
@@ -40,7 +42,7 @@ namespace AdventureGame
 
         public void Draw(Graphics gc, Vec2 offset, double scale = 1)
         {
-            if (image is null)
+            if (image is null || !IsValid)
                 return;
             if (offset.X != 0 || offset.Y != 0)
                 ;
@@ -49,11 +51,22 @@ namespace AdventureGame
                     (int) (GameObject.Y + offset.Y) - showBitmap.Height / 2));
         }
 
-        public static void DrawAllTextures(Graphics gc)
+        public void Turn(bool left)
         {
-            foreach (var tex in textures)
+            if (left != _left)
             {
-                tex.Draw(gc);
+                var t = new Bitmap(showBitmap.Width, showBitmap.Height);
+                for (int i = 0; i < showBitmap.Width; i++)
+                {
+                    for (int j = 0; j < showBitmap.Height; j++)
+                    {
+                        t.SetPixel(i, j, 
+                            showBitmap.GetPixel(showBitmap.Width - i - 1, j));
+                    }
+                }
+
+                showBitmap = t;
+                _left = left;
             }
         }
         public void Resize(int x, int y)

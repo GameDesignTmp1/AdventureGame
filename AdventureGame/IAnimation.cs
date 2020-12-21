@@ -11,7 +11,7 @@ namespace AdventureGame
     interface IAnimation
     {
         void LoadAnimation(string texFolder);
-        void Play(Graphics gc, Vec2 offset);
+        void Draw(Graphics gc, Vec2 offset);
         void Pause();
         void Reset();
         void Destroy();

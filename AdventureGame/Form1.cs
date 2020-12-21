@@ -18,6 +18,7 @@ namespace AdventureGame
         {
             InitializeComponent();
             Time.Init();
+            Camera.Init(this);
             Scene.DebugControl = textBox1;
         }
 
@@ -37,16 +38,6 @@ namespace AdventureGame
             base.OnPaint(e);
             Graphics gc = e.Graphics;
             Scene.Update(gc);
-            GameObject obj = null;
-            foreach (var gameObject in GameObject.GameObjects)
-            {
-                if (gameObject.Tag == "Player")
-                {
-                    obj = gameObject;
-                    break;
-                }
-            }
-
         }
 
         private void 设置场景ToolStripMenuItem_Click(object sender, EventArgs e)

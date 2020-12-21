@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="Collision.cs" />
+    <Compile Include="Enemy.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="IAnimation.cs" />
     <Compile Include="ICollision.cs" />
@@ -62,6 +63,7 @@
     </Compile>
     <Compile Include="IMusic.cs" />
     <Compile Include="Input.cs" />
+    <Compile Include="Item.cs" />
     <Compile Include="Music.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />

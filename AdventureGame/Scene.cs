@@ -15,6 +15,7 @@ namespace AdventureGame
         public static Vec2 Offset;
         public static Control DebugControl = null;
         public static List<string> Tags = new List<string>();
+        public static Player Player = null;
 
         private static void InitTags()
         {
@@ -22,6 +23,7 @@ namespace AdventureGame
             Tags.Add("Player");
             Tags.Add("Enemy");
             Tags.Add("Weapon");
+            Tags.Add("Coin");
             Tags.Add("Background");
             Tags.Add("Foreground");
         }
@@ -56,6 +58,7 @@ namespace AdventureGame
                 obj.Texture.LoadTexture(tp.Filename);
                 ObjCopy(obj.Texture, tp);
                 obj.Texture.Resize(obj.Texture.Width, obj.Texture.Height);
+                obj.InitAnimation();
             }
         }
 
@@ -74,10 +77,14 @@ namespace AdventureGame
                 case "Player":
                     obj = new Player(x, y);
                     obj.Depth = 0;
+                    var p = (obj as Player);
+                    Camera.Attach(obj);
+                    Player = p;
+                    p.Animations.Add("Walk",
+                        new TmpAnimation(obj, ".\\image\\PlayerIdle"));
                     break;
                 case "Background":
-                    obj = new GameObject(x, y);
-                    obj.Depth = -1;
+                    obj = new GameObject(x, y, -1);
                     break;
                 case "Building":
                     obj = new GameObject(x, y);
@@ -90,6 +97,14 @@ namespace AdventureGame
                 case "Weapon":
                     obj = new GameObject(x, y);
                     obj.Depth = 0;
+                    break;
+                case "Coin":
+                    obj = new Item(x, y, 0, "Coin");
+                    break;
+                case "Enemy":
+                    obj = new Enemy(x, y);
+                    ((Enemy) obj).Animations.Add("Idle", 
+                        new TmpAnimation(obj, ".\\image\\EnemyIdle"));
                     break;
                 default:
                     obj = new GameObject(x, y);

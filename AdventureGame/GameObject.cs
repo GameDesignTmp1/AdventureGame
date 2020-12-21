@@ -10,7 +10,7 @@ namespace AdventureGame
 {
     public class GameObject
     {
-        private class Sorter : IComparer<GameObject>
+        public class Sorter : IComparer<GameObject>
         {
             public int Compare(GameObject x, GameObject y)
             {
@@ -22,6 +22,7 @@ namespace AdventureGame
             }
         }
         public static List<GameObject> GameObjects = new List<GameObject>();
+        public Dictionary<string, TmpAnimation> Animations = null;
         public Collision Collision = null;
         public Music Music = null;
         public Transform Transform = null;
@@ -43,26 +44,31 @@ namespace AdventureGame
             if (depth == 0)
             {
                 Collision = new Collision(this);
-                Transform = new Transform(this, new Vec2(x, y), false);
             }
+            Transform = new Transform(this, new Vec2(x, y), false);
             Texture = new TmpTexture(this);
             GameObjects.Add(this);
             GameObjects.Sort(new Sorter());
         }
 
         // 每帧调用，更新所有物体的状态
-        public static void Update(Graphics gc, bool debug = false)
+        public static void Update(Graphics gc, bool debug)
         {
             Vec2 offset = new Vec2(Camera.GetCenter());
             offset = -offset;
-            foreach (var gameObject in GameObjects)
+            for (int i = 0;i < GameObjects.Count;i++)
             {
+                var gameObject = GameObjects[i];
+                if (!gameObject.IsValid)
+                    continue;
                 gameObject.Texture.Draw(gc, offset);
                 if (debug)
-                    gameObject.Collision.Draw(gc, offset);
+                    gameObject.Collision?.Draw(gc, offset);
                 gameObject.Transform.UpdateTransform();
-                gameObject.Update();
+                gameObject.Collision?.UpdateCollide();
+                gameObject.Update(gc);
             }
+            TmpAnimation.DrawAll(gc, offset);
         }
         // 碰撞发生时
         public virtual void OnTriggerEnter(List<GameObject> gameObjects){}
@@ -71,10 +77,20 @@ namespace AdventureGame
         // 有碰撞体驻留时
         public virtual void OnTriggerStay(List<GameObject> gameObjects){}
         // 每帧更新逻辑
-        public virtual void Update()
+        public virtual void Update(Graphics gc)
         {
         }
 
+        public void InitAnimation()
+        {
+            if (Animations != null)
+            {
+                foreach (var anim in Animations)
+                {
+                    anim.Value.Init();
+                }
+            }
+        }
         public void Destroy()
         {
             IsValid = false;
