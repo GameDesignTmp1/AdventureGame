@@ -19,6 +19,7 @@ namespace AdventureGame
             InitializeComponent();
             Time.Init();
             Camera.Init(this);
+            Music.Init(this);
             Scene.DebugControl = textBox1;
         }
 

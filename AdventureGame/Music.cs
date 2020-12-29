@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,37 +9,53 @@ using AxWMPLib;
 
 namespace AdventureGame
 {
-    public class Music:IMusic
+    public static class Music
     {
-        AxWindowsMediaPlayer axWindowsMediaPlayer = new AxWindowsMediaPlayer();
-
-        public Music(Form form)
+        static AxWindowsMediaPlayer axWindowsMediaPlayer = new AxWindowsMediaPlayer();
+        static List<string> music = new List<string>();//存放所有音乐文件路径
+        public static void Init(Form form)
         {
+            ((System.ComponentModel.ISupportInitialize)(axWindowsMediaPlayer)).BeginInit();
             form.Controls.Add(axWindowsMediaPlayer);
+            ((System.ComponentModel.ISupportInitialize)(axWindowsMediaPlayer)).EndInit();
             axWindowsMediaPlayer.Visible = false;
+            LoadMusic();
+            Play("游戏胜利.mp3");
         }
-        public float GetTotalTime()
+        public static float GetTotalTime()
         {
             return 0;
 
         }
 
-        public void LoadMusic(string filename)
+        public static void LoadMusic()
         {
-
-            axWindowsMediaPlayer.URL = filename;
+            DirectoryInfo dir = new DirectoryInfo(".\\music");
+            FileInfo[] files = dir.GetFiles();
+            DirectoryInfo[] mDirs = dir.GetDirectories();
+            foreach (FileInfo file in files)
+            {
+                music.Add(file.FullName);//将文件路径加到列表中
+            }
 
         }
 
-        public void Pause()
+        public static void Pause()
         {
             axWindowsMediaPlayer.Ctlcontrols.pause();
 
         }
 
-        public void Play()
+        public static void Play(string filename)
         {
-            axWindowsMediaPlayer.Ctlcontrols.play();
+            foreach (var m in music)
+            {
+                if (m.Split('\\').Last() == filename)
+                {
+                    axWindowsMediaPlayer.URL = m;
+                    axWindowsMediaPlayer.Ctlcontrols.play();
+                }
+            }
         }
     }
 }
